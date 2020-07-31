@@ -11,7 +11,7 @@ from .upload_progress_recorder import UploadProgressRecorder
 
 def put_data(
         up_token, key, data, params=None, mime_type='application/octet-stream', check_crc=False, progress_handler=None,
-        fname=None, home_dir=None):
+        fname=None, hostscache_dir=None):
     """上传二进制流到七牛
 
     Args:
@@ -22,6 +22,7 @@ def put_data(
         mime_type:        上传数据的mimeType
         check_crc:        是否校验crc32
         progress_handler: 上传进度
+        hostscache_dir： host请求 缓存文件保存位置
 
     Returns:
         一个dict变量，类似 {"hash": "<Hash string>", "key": "<Key string>"}
@@ -39,12 +40,12 @@ def put_data(
         final_data = data
 
     crc = crc32(final_data)
-    return _form_put(up_token, key, final_data, params, mime_type, crc, home_dir, progress_handler, fname)
+    return _form_put(up_token, key, final_data, params, mime_type, crc, hostscache_dir, progress_handler, fname)
 
 
 def put_file(up_token, key, file_path, params=None,
              mime_type='application/octet-stream', check_crc=False,
-             progress_handler=None, upload_progress_recorder=None, keep_last_modified=False, home_dir=None):
+             progress_handler=None, upload_progress_recorder=None, keep_last_modified=False, hostscache_dir=None):
     """上传文件到七牛
 
     Args:
@@ -56,6 +57,7 @@ def put_file(up_token, key, file_path, params=None,
         check_crc:        是否校验crc32
         progress_handler: 上传进度
         upload_progress_recorder: 记录上传进度，用于断点续传
+        hostscache_dir： host请求 缓存文件保存位置
 
     Returns:
         一个dict变量，类似 {"hash": "<Hash string>", "key": "<Key string>"}
@@ -68,19 +70,19 @@ def put_file(up_token, key, file_path, params=None,
         file_name = os.path.basename(file_path)
         modify_time = int(os.path.getmtime(file_path))
         if size > config._BLOCK_SIZE * 2:
-            ret, info = put_stream(up_token, key, input_stream, file_name, size, home_dir, params,
+            ret, info = put_stream(up_token, key, input_stream, file_name, size, hostscache_dir, params,
                                    mime_type, progress_handler,
                                    upload_progress_recorder=upload_progress_recorder,
                                    modify_time=modify_time, keep_last_modified=keep_last_modified)
         else:
             crc = file_crc32(file_path)
             ret, info = _form_put(up_token, key, input_stream, params, mime_type,
-                                  crc, home_dir, progress_handler, file_name,
+                                  crc, hostscache_dir, progress_handler, file_name,
                                   modify_time=modify_time, keep_last_modified=keep_last_modified)
     return ret, info
 
 
-def _form_put(up_token, key, data, params, mime_type, crc, home_dir=None, progress_handler=None, file_name=None,
+def _form_put(up_token, key, data, params, mime_type, crc, hostscache_dir=None, progress_handler=None, file_name=None,
               modify_time=None,
               keep_last_modified=False):
     fields = {}
@@ -96,7 +98,7 @@ def _form_put(up_token, key, data, params, mime_type, crc, home_dir=None, progre
     if config.get_default('default_zone').up_host:
         url = config.get_default('default_zone').up_host
     else:
-        url = config.get_default('default_zone').get_up_host_by_token(up_token, home_dir)
+        url = config.get_default('default_zone').get_up_host_by_token(up_token, hostscache_dir)
     # name = key if key else file_name
 
     fname = file_name
@@ -113,7 +115,7 @@ def _form_put(up_token, key, data, params, mime_type, crc, home_dir=None, progre
             if config.get_default('default_zone').up_host_backup:
                 url = config.get_default('default_zone').up_host_backup
             else:
-                url = config.get_default('default_zone').get_up_host_backup_by_token(up_token, home_dir)
+                url = config.get_default('default_zone').get_up_host_backup_by_token(up_token, hostscache_dir)
         if hasattr(data, 'read') is False:
             pass
         elif hasattr(data, 'seek') and (not hasattr(data, 'seekable') or data.seekable()):
@@ -125,10 +127,10 @@ def _form_put(up_token, key, data, params, mime_type, crc, home_dir=None, progre
     return r, info
 
 
-def put_stream(up_token, key, input_stream, file_name, data_size, home_dir=None, params=None,
+def put_stream(up_token, key, input_stream, file_name, data_size, hostscache_dir=None, params=None,
                mime_type=None, progress_handler=None,
                upload_progress_recorder=None, modify_time=None, keep_last_modified=False):
-    task = _Resume(up_token, key, input_stream, file_name, data_size, home_dir, params, mime_type,
+    task = _Resume(up_token, key, input_stream, file_name, data_size, hostscache_dir, params, mime_type,
                    progress_handler, upload_progress_recorder, modify_time, keep_last_modified)
     return task.upload()
 
@@ -150,9 +152,10 @@ class _Resume(object):
         progress_handler: 上传进度
         upload_progress_recorder:  记录上传进度，用于断点续传
         modify_time:      上传文件修改日期
+        hostscache_dir： host请求 缓存文件保存位置
     """
 
-    def __init__(self, up_token, key, input_stream, file_name, data_size, home_dir, params, mime_type,
+    def __init__(self, up_token, key, input_stream, file_name, data_size, hostscache_dir, params, mime_type,
                  progress_handler, upload_progress_recorder, modify_time, keep_last_modified):
         """初始化断点续上传"""
         self.up_token = up_token
@@ -160,7 +163,7 @@ class _Resume(object):
         self.input_stream = input_stream
         self.file_name = file_name
         self.size = data_size
-        self.home_dir = home_dir
+        self.hostscache_dir = hostscache_dir
         self.params = params
         self.mime_type = mime_type
         self.progress_handler = progress_handler
@@ -201,7 +204,7 @@ class _Resume(object):
         if config.get_default('default_zone').up_host:
             host = config.get_default('default_zone').up_host
         else:
-            host = config.get_default('default_zone').get_up_host_by_token(self.up_token, self.home_dir)
+            host = config.get_default('default_zone').get_up_host_by_token(self.up_token, self.hostscache_dir)
         offset = self.recovery_from_record()
         for block in _file_iter(self.input_stream, config._BLOCK_SIZE, offset):
             length = len(block)
@@ -213,7 +216,7 @@ class _Resume(object):
                 if config.get_default('default_zone').up_host_backup:
                     host = config.get_default('default_zone').up_host_backup
                 else:
-                    host = config.get_default('default_zone').get_up_host_backup_by_token(self.up_token, self.home_dir)
+                    host = config.get_default('default_zone').get_up_host_backup_by_token(self.up_token, self.hostscache_dir)
             if info.need_retry() or crc != ret['crc32']:
                 ret, info = self.make_block(block, length, host)
                 if ret is None or crc != ret['crc32']:

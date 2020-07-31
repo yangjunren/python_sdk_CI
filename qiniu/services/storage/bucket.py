@@ -161,15 +161,16 @@ class BucketManager(object):
         to = entry(bucket_to, key_to)
         return self.__rs_do('copy', resource, to, 'force/{0}'.format(force))
 
-    def fetch(self, url, bucket, key=None, home_dir=None):
+    def fetch(self, url, bucket, key=None, hostscache_dir=None):
         """抓取文件:
         从指定URL抓取资源，并将该资源存储到指定空间中，具体规格参考：
         http://developer.qiniu.com/docs/v6/api/reference/rs/fetch.html
 
         Args:
-            url:    指定的URL
-            bucket: 目标资源空间
-            key:    目标资源文件名
+            url:      指定的URL
+            bucket:   目标资源空间
+            key:      目标资源文件名
+            hostscache_dir： host请求 缓存文件保存位置
 
         Returns:
             一个dict变量：
@@ -179,9 +180,9 @@ class BucketManager(object):
         """
         resource = urlsafe_base64_encode(url)
         to = entry(bucket, key)
-        return self.__io_do(bucket, 'fetch', resource, 'to/{0}'.format(to), home_dir=home_dir)
+        return self.__io_do(bucket, 'fetch', resource, 'to/{0}'.format(to), home_dir=hostscache_dir)
 
-    def prefetch(self, bucket, key, home_dir=None):
+    def prefetch(self, bucket, key, hostscache_dir=None):
         """镜像回源预取文件:
 
         从镜像源站抓取资源到空间中，如果空间中已经存在，则覆盖该资源，具体规格参考
@@ -190,13 +191,14 @@ class BucketManager(object):
         Args:
             bucket: 待获取资源所在的空间
             key:    代获取资源文件名
+            hostscache_dir： host请求 缓存文件保存位置
 
         Returns:
             一个dict变量，成功返回NULL，失败返回{"error": "<errMsg string>"}
             一个ResponseInfo对象
         """
         resource = entry(bucket, key)
-        return self.__io_do(bucket, 'prefetch', resource, home_dir=home_dir)
+        return self.__io_do(bucket, 'prefetch', resource, home_dir=hostscache_dir)
 
     def change_mime(self, bucket, key, mime):
         """修改文件mimeType:
