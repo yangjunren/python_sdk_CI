@@ -180,7 +180,7 @@ class BucketManager(object):
         """
         resource = urlsafe_base64_encode(url)
         to = entry(bucket, key)
-        return self.__io_do(bucket, 'fetch', resource, 'to/{0}'.format(to), home_dir=hostscache_dir)
+        return self.__io_do(bucket, 'fetch', hostscache_dir, resource, 'to/{0}'.format(to))
 
     def prefetch(self, bucket, key, hostscache_dir=None):
         """镜像回源预取文件:
@@ -198,7 +198,7 @@ class BucketManager(object):
             一个ResponseInfo对象
         """
         resource = entry(bucket, key)
-        return self.__io_do(bucket, 'prefetch', resource, home_dir=hostscache_dir)
+        return self.__io_do(bucket, 'prefetch', hostscache_dir, resource)
 
     def change_mime(self, bucket, key, mime):
         """修改文件mimeType:
@@ -353,7 +353,7 @@ class BucketManager(object):
     def __rs_do(self, operation, *args):
         return self.__server_do(config.get_default('default_rs_host'), operation, *args)
 
-    def __io_do(self, bucket, operation, *args, home_dir):
+    def __io_do(self, bucket, operation, home_dir, *args):
         ak = self.auth.get_access_key()
         io_host = self.zone.get_io_host(ak, bucket, home_dir)
         return self.__server_do(io_host, operation, *args)
