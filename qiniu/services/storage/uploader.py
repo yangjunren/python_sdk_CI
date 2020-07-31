@@ -126,10 +126,7 @@ def _form_put(up_token, key, data, params, mime_type, crc, hostscache_dir=None, 
 
     return r, info
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 00f64bf2ba5c1b1d6c5691062f15ca990988b41f
 def put_stream(up_token, key, input_stream, file_name, data_size, hostscache_dir=None, params=None,
                mime_type=None, progress_handler=None,
                upload_progress_recorder=None, modify_time=None, keep_last_modified=False):
@@ -219,7 +216,8 @@ class _Resume(object):
                 if config.get_default('default_zone').up_host_backup:
                     host = config.get_default('default_zone').up_host_backup
                 else:
-                    host = config.get_default('default_zone').get_up_host_backup_by_token(self.up_token, self.hostscache_dir)
+                    host = config.get_default('default_zone').get_up_host_backup_by_token(self.up_token,
+                                                                                          self.hostscache_dir)
             if info.need_retry() or crc != ret['crc32']:
                 ret, info = self.make_block(block, length, host)
                 if ret is None or crc != ret['crc32']:

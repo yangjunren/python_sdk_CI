@@ -353,7 +353,7 @@ class BucketManager(object):
     def __rs_do(self, operation, *args):
         return self.__server_do(config.get_default('default_rs_host'), operation, *args)
 
-    def __io_do(self, bucket, operation, home_dir, *args):
+    def __io_do(self, bucket, operation, *args, home_dir):
         ak = self.auth.get_access_key()
         io_host = self.zone.get_io_host(ak, bucket, home_dir)
         return self.__server_do(io_host, operation, *args)
