@@ -161,7 +161,7 @@ class BucketManager(object):
         to = entry(bucket_to, key_to)
         return self.__rs_do('copy', resource, to, 'force/{0}'.format(force))
 
-    def fetch(self, url, bucket, key=None):
+    def fetch(self, url, bucket, key=None, home_dir=None):
         """抓取文件:
         从指定URL抓取资源，并将该资源存储到指定空间中，具体规格参考：
         http://developer.qiniu.com/docs/v6/api/reference/rs/fetch.html
@@ -172,14 +172,16 @@ class BucketManager(object):
             key:    目标资源文件名
 
         Returns:
-            一个dict变量，成功返回NULL，失败返回{"error": "<errMsg string>"}
+            一个dict变量：
+                成功 返回{'fsize': <fsize int>, 'hash': <hash string>, 'key': <key string>, 'mimeType': <mimeType string>}
+                失败 返回 None
             一个ResponseInfo对象
         """
         resource = urlsafe_base64_encode(url)
         to = entry(bucket, key)
-        return self.__io_do(bucket, 'fetch', resource, 'to/{0}'.format(to))
+        return self.__io_do(bucket, 'fetch', resource, 'to/{0}'.format(to), home_dir=home_dir)
 
-    def prefetch(self, bucket, key):
+    def prefetch(self, bucket, key, home_dir=None):
         """镜像回源预取文件:
 
         从镜像源站抓取资源到空间中，如果空间中已经存在，则覆盖该资源，具体规格参考
@@ -194,7 +196,7 @@ class BucketManager(object):
             一个ResponseInfo对象
         """
         resource = entry(bucket, key)
-        return self.__io_do(bucket, 'prefetch', resource)
+        return self.__io_do(bucket, 'prefetch', resource, home_dir=home_dir)
 
     def change_mime(self, bucket, key, mime):
         """修改文件mimeType:
@@ -349,9 +351,9 @@ class BucketManager(object):
     def __rs_do(self, operation, *args):
         return self.__server_do(config.get_default('default_rs_host'), operation, *args)
 
-    def __io_do(self, bucket, operation, *args):
+    def __io_do(self, bucket, operation, *args, home_dir):
         ak = self.auth.get_access_key()
-        io_host = self.zone.get_io_host(ak, bucket)
+        io_host = self.zone.get_io_host(ak, bucket, home_dir)
         return self.__server_do(io_host, operation, *args)
 
     def __server_do(self, host, operation, *args):

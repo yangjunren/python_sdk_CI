@@ -21,6 +21,7 @@ _policy_fields = set([
 
     'endUser',  # 回调时上传端标识
     'saveKey',  # 自定义资源名
+    'forceSaveKey', # saveKey的优先级设置。为 true 时，saveKey不能为空，会忽略客户端指定的key，强制使用saveKey进行文件命名。参数不设置时，默认值为false
     'insertOnly',  # 插入模式开关
 
     'detectMime',  # MimeType侦测开关
@@ -264,7 +265,7 @@ class QiniuMacAuth(object):
         data += "\n"
 
         if content_type and content_type != "application/octet-stream" and body:
-            if isinstance(body, bytes):
+            if isinstance(body,bytes):
                 data += body.decode(encoding='UTF-8')
             else:
                 data += body

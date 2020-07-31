@@ -3,10 +3,10 @@
 
 from qiniu import QiniuMacAuth
 from qiniu import Sms
-import os
 
-access_key = os.getenv('QINIU_ACCESS_KEY')
-secret_key = os.getenv('QINIU_SECRET_KEY')
+
+access_key = ''
+secret_key = ''
 
 # 初始化Auth状态
 q = QiniuMacAuth(access_key, secret_key)

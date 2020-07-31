@@ -16,13 +16,17 @@ q = Auth(access_key, secret_key)
 bucket_name = ''
 
 # 上传到七牛后保存的文件名
-key = 'my-python-七牛.png'
+key = ''
 
 # 生成上传 Token，可以指定过期时间等
 token = q.upload_token(bucket_name, key, 3600)
 
 # 要上传文件的本地路径
-localfile = '/Users/jemy/Documents/qiniu.png'
+localfile = ''
+
+# host 请求的缓存文件保存路径，如不指定，默认保存在程序运行当前目录
+# home_dir = ''
+# ret, info = put_file(token, key, localfile,home_dir=home_dir)
 
 ret, info = put_file(token, key, localfile)
 print(ret)

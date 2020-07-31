@@ -7,16 +7,16 @@ from qiniu import BucketManager
 access_key = '...'
 secret_key = '...'
 
-bucket_name = 'Bucket_Name'
+bucket_name = '...'
 
 q = Auth(access_key, secret_key)
 
 bucket = BucketManager(q)
 
-url = 'http://aaa.example.com/test.jpg'
+url = '...'
 
-key = 'test.jpg'
+key = '...'
 
 ret, info = bucket.fetch(url, bucket_name, key)
+print(ret)
 print(info)
-assert ret['key'] == key
