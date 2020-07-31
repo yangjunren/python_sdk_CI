@@ -1,11 +1,11 @@
 sudo: false
 language: python
 python:
-- "2.7"
-- "3.4"
-- "3.5"
-- "3.6"
-- "3.7"
+- '2.7'
+- '3.4'
+- '3.5'
+- '3.6'
+- '3.7'
 install:
 - pip install flake8
 - pip install pytest
@@ -13,25 +13,22 @@ install:
 - pip install requests
 - pip install scrutinizer-ocular
 - pip install codecov
-
 before_script:
 - export QINIU_TEST_BUCKET="pythonsdk"
 - export QINIU_TEST_DOMAIN="pythonsdk.qiniudn.com"
 - export QINIU_TEST_ENV="travis"
 - export PYTHONPATH="$PYTHONPATH:."
-
 script:
-- if [[ "$TRAVIS_PYTHON_VERSION" != "2.6.9" ]]; then flake8 --show-source --max-line-length=160 .; 
-  fi
+- if [[ "$TRAVIS_PYTHON_VERSION" != "2.6.9" ]]; then flake8 --show-source --max-line-length=160
+  .; fi
 - py.test --cov qiniu
 - if [[ "$TRAVIS_PYTHON_VERSION" != "2.6.9" ]]; then ocular --data-file .coverage;
   fi
 - coverage run test_qiniu.py
-
 env:
   global:
-    - secure: "McZuxM4UAKabtGvCi+t1F/Spb/3Yzb6O7hEk0JLwJEYCnl7hkfV1ogAgjjYdHwkNPjOwUaz3rpdmahz64ohtpucPsIyQjgK7tigTM+UgdAcg77RflB50yJ3yCnJOHMxVRF0RNLZqFeuf3GkfnOyzZFynN+LmM5n+0/iIuC4LXgs="
-    - QINIU_ACCESS_KEY=vHg2e7nOh7Jsucv2Azr5FH6omPgX22zoJRWa0FN5
-
+  - secure: McZuxM4UAKabtGvCi+t1F/Spb/3Yzb6O7hEk0JLwJEYCnl7hkfV1ogAgjjYdHwkNPjOwUaz3rpdmahz64ohtpucPsIyQjgK7tigTM+UgdAcg77RflB50yJ3yCnJOHMxVRF0RNLZqFeuf3GkfnOyzZFynN+LmM5n+0/iIuC4LXgs=
+  - QINIU_ACCESS_KEY=vHg2e7nOh7Jsucv2Azr5FH6omPgX22zoJRWa0FN5
+  - secure: Xq5XDts0mEMKoKqoqb+op9qo1JfPVF5Up7HQScv+CO00KtN9mP0UMlym7s2Ps9Ej3rPPVEnKswkjM4+F7TsLxNgPfbwZGC7hBaywM4wI1+ExcpInkCNEULpitzvc7LIyZTM8MBedUnyhPGYMR+QF0QpO9RHNGI/02hxONDkgEkxpFrx5eMYdIv95QCXam2g2XvIEuk3E16hydUx1yUZvbuimOnQXmRx+fer6eON+BzK1DfyfSCylUtGhhvUowxBhUkj+++oUDIzFXWJ+9vdptQkvPLzeXpSCbYxy/VOJO8Pi74LsYfIQgPgzCYTAjycogNqKzQdc1QkDeh4tr+OoRmYb+68BOx3CQepw16iuys7X2IZ4uNVZU1yixROfhB132LMrFxjevNFmZ+KRyK0XLsTSOPidtEjoGGtJ6psau/lFmQ/HfIJat/uliEzAuWbNxTDTqmsnm0TnQzn/LHxs27fGdW+HhrdIRw69TcIyhh/MVczH4fiY+Fqp2041SrXadA+VSb5o5QClOH8lOQaiCAbeIVr4zm6TmLYJpV4otIdYAWF9rWA/22ebF+uud3r6U9HCveIHhT2A7JKR8iCvE7K3bNlYPjqbJ5SupBiyjaUQhjtPMqJb5Pu7FVBf6mDn7YPi2nSyBsAqA5HpcNytF5h+LGfQBN03LcFbmvK13pw=
 after_success:
-  - codecov
+- codecov
