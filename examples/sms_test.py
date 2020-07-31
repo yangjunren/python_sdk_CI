@@ -4,7 +4,7 @@
 from qiniu import QiniuMacAuth
 from qiniu import Sms
 
-"""
+
 access_key = ''
 secret_key = ''
 
@@ -13,7 +13,7 @@ q = QiniuMacAuth(access_key, secret_key)
 
 # 初始化Sms
 sms = Sms(q)
-"""
+
 
 """
 #创建签名
