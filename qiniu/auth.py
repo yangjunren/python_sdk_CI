@@ -265,7 +265,7 @@ class QiniuMacAuth(object):
         data += "\n"
 
         if content_type and content_type != "application/octet-stream" and body:
-            if isinstance(body,bytes):
+            if isinstance(body, bytes):
                 data += body.decode(encoding='UTF-8')
             else:
                 data += body
