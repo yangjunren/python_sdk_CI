@@ -7,7 +7,7 @@
 [![Latest Stable Version](https://img.shields.io/pypi/v/qiniu.svg)](https://pypi.python.org/pypi/qiniu)
 [![Download Times](https://img.shields.io/pypi/dm/qiniu.svg)](https://pypi.python.org/pypi/qiniu)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/qiniu/python-sdk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/qiniu/python-sdk/?branch=master)
-[![Coverage Status](https://codecov.io/gh/qiniu/python-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/qiniu/python-sdk)
+[![Coverage Status](https://codecov.io/gh/yangjunren/python_sdk_CI/branch/master/graph/badge.svg)](https://codecov.io/github/yangjunren/python_sdk_CI)
 
 ## 安装
 
