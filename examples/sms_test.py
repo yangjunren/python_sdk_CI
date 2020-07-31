@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # flake8: noqa
-
+"""
 from qiniu import QiniuMacAuth
 from qiniu import Sms
 
@@ -13,7 +13,7 @@ q = QiniuMacAuth(access_key, secret_key)
 
 # 初始化Sms
 sms = Sms(q)
-
+"""
 
 """
 #创建签名
