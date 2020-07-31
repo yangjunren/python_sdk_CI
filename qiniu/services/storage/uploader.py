@@ -126,20 +126,11 @@ def _form_put(up_token, key, data, params, mime_type, crc, hostscache_dir=None, 
 
     return r, info
 
-
-<<<<<<< HEAD
 def put_stream(up_token, key, input_stream, file_name, data_size, hostscache_dir=None, params=None,
                mime_type=None, progress_handler=None,
                upload_progress_recorder=None, modify_time=None, keep_last_modified=False):
     task = _Resume(up_token, key, input_stream, file_name, data_size, hostscache_dir, params, mime_type,
                    progress_handler, upload_progress_recorder, modify_time, keep_last_modified)
-=======
-def put_stream(up_token, key, input_stream, file_name, data_size, params=None,
-               mime_type=None, progress_handler=None,
-               upload_progress_recorder=None, modify_time=None, keep_last_modified=False, home_dir=None):
-    task = _Resume(up_token, key, input_stream, file_name, data_size, params, mime_type,
-                   progress_handler, upload_progress_recorder, modify_time, keep_last_modified, home_dir=home_dir)
->>>>>>> 514ea14c389480a01d19b46a6d163c2849e5bca8
     return task.upload()
 
 
