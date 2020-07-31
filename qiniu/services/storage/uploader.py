@@ -126,6 +126,7 @@ def _form_put(up_token, key, data, params, mime_type, crc, hostscache_dir=None, 
 
     return r, info
 
+
 def put_stream(up_token, key, input_stream, file_name, data_size, hostscache_dir=None, params=None,
                mime_type=None, progress_handler=None,
                upload_progress_recorder=None, modify_time=None, keep_last_modified=False):
