@@ -22,7 +22,7 @@ def put_data(
         mime_type:        上传数据的mimeType
         check_crc:        是否校验crc32
         progress_handler: 上传进度
-        hostscache_dir： host请求 缓存文件保存位置
+        hostscache_dir：  host请求 缓存文件保存位置
 
     Returns:
         一个dict变量，类似 {"hash": "<Hash string>", "key": "<Key string>"}
@@ -49,15 +49,15 @@ def put_file(up_token, key, file_path, params=None,
     """上传文件到七牛
 
     Args:
-        up_token:         上传凭证
-        key:              上传文件名
-        file_path:        上传文件的路径
-        params:           自定义变量，规格参考 http://developer.qiniu.com/docs/v6/api/overview/up/response/vars.html#xvar
-        mime_type:        上传数据的mimeType
-        check_crc:        是否校验crc32
-        progress_handler: 上传进度
+        up_token:                 上传凭证
+        key:                      上传文件名
+        file_path:                上传文件的路径
+        params:                   自定义变量，规格参考 http://developer.qiniu.com/docs/v6/api/overview/up/response/vars.html#xvar
+        mime_type:                上传数据的mimeType
+        check_crc:                是否校验crc32
+        progress_handler:         上传进度
         upload_progress_recorder: 记录上传进度，用于断点续传
-        hostscache_dir： host请求 缓存文件保存位置
+        hostscache_dir：          host请求 缓存文件保存位置
 
     Returns:
         一个dict变量，类似 {"hash": "<Hash string>", "key": "<Key string>"}
@@ -143,16 +143,16 @@ class _Resume(object):
     http://developer.qiniu.com/docs/v6/api/reference/up/mkfile.html
 
     Attributes:
-        up_token:         上传凭证
-        key:              上传文件名
-        input_stream:     上传二进制流
-        data_size:        上传流大小
-        params:           自定义变量，规格参考 http://developer.qiniu.com/docs/v6/api/overview/up/response/vars.html#xvar
-        mime_type:        上传数据的mimeType
-        progress_handler: 上传进度
-        upload_progress_recorder:  记录上传进度，用于断点续传
-        modify_time:      上传文件修改日期
-        hostscache_dir： host请求 缓存文件保存位置
+        up_token:                   上传凭证
+        key:                        上传文件名
+        input_stream:               上传二进制流
+        data_size:                  上传流大小
+        params:                     自定义变量，规格参考 http://developer.qiniu.com/docs/v6/api/overview/up/response/vars.html#xvar
+        mime_type:                  上传数据的mimeType
+        progress_handler:           上传进度
+        upload_progress_recorder:   记录上传进度，用于断点续传
+        modify_time:                上传文件修改日期
+        hostscache_dir：            host请求 缓存文件保存位置
     """
 
     def __init__(self, up_token, key, input_stream, file_name, data_size, hostscache_dir, params, mime_type,
