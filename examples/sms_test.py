@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # flake8: noqa
-
+"""
 from qiniu import QiniuMacAuth
 from qiniu import Sms
 
-"""
+
 access_key = ''
 secret_key = ''
 
@@ -93,6 +93,3 @@ parameters = {}
 req, info = sms.sendMessage(template_id, mobiles, parameters)
 print(req, info)
 """
-
-
-
